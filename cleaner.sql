@@ -1,4 +1,4 @@
-DROP DATABASE IF EXISTS cleaner;
+  DROP DATABASE IF EXISTS cleaner;
 CREATE DATABASE cleaner CHARACTER SET utf8mb4;
 USE cleaner;
 
@@ -10,12 +10,12 @@ CREATE TABLE oficina (
   codigo_postal VARCHAR(10) NOT NULL,
   telefono VARCHAR(20) NOT NULL,
   linea_direccion1 VARCHAR(50) NOT NULL,
-  linea_direccion2 VARCHAR(50) DEFAULT NULL,
+  linea_direccion2 VARCHAR(50) DEFAULT 'NO TIENE',
   PRIMARY KEY (codigo_oficina)
 );
 
 CREATE TABLE empleado (
-  codigo_empleado INTEGER NOT NULL,
+  codigo_empleado INTEGER AUTO_INCREMENT NOT NULL,
   nombre VARCHAR(50) NOT NULL,
   apellido1 VARCHAR(50) NOT NULL,
   apellido2 VARCHAR(50) DEFAULT NULL,
@@ -27,7 +27,8 @@ CREATE TABLE empleado (
   PRIMARY KEY (codigo_empleado),
   FOREIGN KEY (codigo_oficina) REFERENCES oficina (codigo_oficina),
   FOREIGN KEY (codigo_jefe) REFERENCES empleado (codigo_empleado)
-);
+) AUTO_INCREMENT= 10;
+
 
 CREATE TABLE gama_producto (
   gama VARCHAR(50) NOT NULL,
@@ -929,6 +930,59 @@ INSERT INTO pago VALUES (35,'PayPal','ak-std-000025','2007-10-06',3321);
 INSERT INTO pago VALUES (38,'PayPal','ak-std-000026','2006-05-26',1171);
 
 
+/*SENTENCIAS DML*/
+/*RETO A. Retorna un listado con el código de oficina y la ciudad donde hay oficinas.*/
+show tables;
+describe oficina;
+select codigo_oficina,ciudad,pais,region,codigo_postal,telefono,linea_direccion1,linea_direccion2
+from oficina;
+select codigo_oficina,ciudad
+from oficina;
+
+/* RETO B. Retorna un listado con la ciudad y el teléfono de las oficinas de España.*/
+show tables;
+describe oficina;
+select codigo_oficina,ciudad,pais,region,codigo_postal,telefono,linea_direccion1,linea_direccion2
+from oficina;
+select ciudad,telefono
+from oficina where pais = 'España';
+
+/*RETO C. Retorna un listado con el nombre, apellidos y email de los empleados cuyo jefe tiene un código de jefe igual a 7.*/
+show tables;
+describe empleado;
+select codigo_empleado,nombre,apellido2,extension,email,codigo_oficina,codigo_jefe,puesto
+from empleado;
+select nombre,apellido1,apellido2,email,codigo_jefe
+from empleado where codigo_jefe = 7;
+
+/*RETO D. Retorna el nombre del puesto, nombre, apellidos y email del jefe de la empresa.*/
+show tables;
+describe empleado;
+select codigo_empleado,nombre,apellido2,extension,email,codigo_oficina,codigo_jefe,puesto
+from empleado;
+select puesto,nombre,apellido1,apellido2,email
+from empleado
+
+/* RETO C. Retorna un listado con el nombre, apellidos y puesto de aquellos empleados que no sean representantes de ventas.*/
+show tables;
+describe empleado;
+select codigo_empleado,nombre,apellido2,extension,email,codigo_oficina,codigo_jefe,puesto
+from empleado;
+select nombre,apellido1,apellido2,puesto
+from empleado
+where not puesto = 'Representantes ventas';
+
+
+
+
+/*RETO E. Retorna un listado con el nombre de los todos los clientes españoles.*/
+show tables;
+describe cliente;
+select codigo_cliente,nombre_cliente,nombre_contacto,apellido_contacto,telefono,fax,linea_direccion1,linea_direccion2,ciudad,region,pais,codigo_postal,codigo_empleado,rep_ventas,limite_credito
+from cliente;
+select 
+
+
 
 /* SENTENCIAS DML PARA PRÁCTICAR SIN MORIR EN EL INTENTO */
 /* EJEMPLO PARA CONOCER LAS COLUMNAS DE UNA TABLA*/
@@ -994,4 +1048,5 @@ select count(*) total_registros /*cl.ciudad, em.codigo_empleado */
  and em.codigo_empleado in (11,30)
  group by cl.ciudad
  order by cl.ciudad desc; 
+
 
